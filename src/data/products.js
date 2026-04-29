@@ -1,11 +1,11 @@
 import pantalon from "../assets/products/pantalon.jpeg";
-import camisa from "../assets/products/chef.jpeg";
-import chef from "../assets/products/camisa.jpeg";
+import chef from "../assets/products/chef.jpeg";
+import camisa from "../assets/products/camisa.jpeg";
 
 export const products = [
   {
     id: 1,
-    name: "Overol Industrial",
+    name: "Pantalon ",
     category: "Dotaciones",
     images: [pantalon]
   },
