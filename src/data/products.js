@@ -1,6 +1,4 @@
-import pantalon from "../assets/products/pantalon.jpeg";
-import chef from "../assets/products/chef.jpeg";
-import camisa from "../assets/products/camisa.jpeg";
+
 
 export const products = [
   {
