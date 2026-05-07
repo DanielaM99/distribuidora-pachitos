@@ -12,7 +12,7 @@ import Nosotros from "./components/Nosotros";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // 🔐 NUEVO (ADMIN)
-import AdminLogin from "./pages/AdminLogin";
+import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 
 export default function App() {
@@ -40,7 +40,7 @@ export default function App() {
           <Route path="/producto/:id" element={<ProductPage />} />
 
           {/* 🔐 ADMIN LOGIN */}
-          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin-login" element={<Login />} />
 
           {/* 🔐 PANEL ADMIN */}
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />

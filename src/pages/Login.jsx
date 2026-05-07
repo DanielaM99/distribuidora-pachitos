@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function AdminLogin() {
+export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ export default function AdminLogin() {
     e.preventDefault();
 
     try {
-      await AdminLogin(email, password);
+      await Login(email, password);
       navigate("/admin");
     } catch (error) {
       alert("Error en login");
