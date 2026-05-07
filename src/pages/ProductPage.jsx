@@ -1,26 +1,55 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "../data/products";
+import { db } from "../firebase/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function ProductPage() {
   const { id } = useParams();
-  const product = products.find((p) => p.id == id);
+  const [producto, setProducto] = useState(null);
 
-  if (!product) return <p>No encontrado</p>;
+  useEffect(() => {
+    const getProducto = async () => {
+      const docRef = doc(db, "productos", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setProducto(docSnap.data());
+      }
+    };
+
+    getProducto();
+  }, [id]);
+
+  if (!producto) return <p>Cargando producto...</p>;
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>{product.name}</h1>
+    <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
+      <img
+        src={producto.imagen}
+        alt={producto.nombre}
+        style={{ width: "100%", borderRadius: 10 }}
+      />
 
-      {product.images.map((img, i) => (
-        <img key={i} src={img} style={{ width: "200px" }} />
-      ))}
-
-      <p>{product.description}</p>
+      <h1>{producto.nombre}</h1>
+      <h2>${producto.precio}</h2>
+      <p>{producto.descripcion}</p>
+      <p><b>Categoría:</b> {producto.categoria}</p>
 
       <a
-        href={`https://wa.me/57300300300007036680?text=Quiero cotizar ${product.name}`}
+        href={`https://wa.me/57TU_NUMERO?text=Hola, quiero este producto: ${producto.nombre}`}
+        target="_blank"
+        style={{
+          display: "block",
+          marginTop: 20,
+          background: "#25D366",
+          color: "#fff",
+          padding: 12,
+          textAlign: "center",
+          borderRadius: 10,
+          textDecoration: "none",
+        }}
       >
-        Cotizar
+        Comprar por WhatsApp
       </a>
     </div>
   );

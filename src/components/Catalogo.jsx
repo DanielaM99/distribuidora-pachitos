@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export default function Catalogo() {
   const [productos, setProductos] = useState([]);
@@ -8,9 +9,11 @@ export default function Catalogo() {
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   const productosRef = collection(db, "productos");
 
-  // 📦 OBTENER PRODUCTOS
+  // 📦 obtener productos
   const obtenerProductos = async () => {
     setLoading(true);
 
@@ -30,13 +33,13 @@ export default function Catalogo() {
     obtenerProductos();
   }, []);
 
-  // 🧠 CATEGORÍAS
+  // 🧠 categorías dinámicas
   const categorias = [
     "todos",
     ...new Set(productos.map((p) => p.categoria)),
   ];
 
-  // 🔍 FILTRO COMBINADO
+  // 🔍 filtro combinado
   const productosFiltrados = productos
     .filter((p) =>
       categoriaActiva === "todos"
@@ -122,6 +125,7 @@ export default function Catalogo() {
         {productosFiltrados.map((p) => (
           <div
             key={p.id}
+            onClick={() => navigate(`/producto/${p.id}`)}
             style={{
               borderRadius: 16,
               overflow: "hidden",
@@ -164,8 +168,9 @@ export default function Catalogo() {
 
               {/* 📲 WHATSAPP */}
               <a
-                href={`https://wa.me/57TU_NUMERO?text=Hola, quiero pedir: ${p.nombre}`}
+                href={`https://wa.me/573000000000?text=Hola, quiero pedir: ${p.nombre}`}
                 target="_blank"
+                onClick={(e) => e.stopPropagation()}
                 style={{
                   display: "block",
                   marginTop: 10,
