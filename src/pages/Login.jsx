@@ -16,7 +16,10 @@ export default function Login() {
       await Login(email, password);
       navigate("/admin");
     } catch (error) {
-      console.log("LOGIN ERROR:", error.code);
+      console.log("🔥 ERROR COMPLETO:", error);
+      console.log("🔥 ERROR CODE:", error.code);
+      console.log("🔥 ERROR MESSAGE:", error.message);
+
       alert(error.code);
     }
   };
