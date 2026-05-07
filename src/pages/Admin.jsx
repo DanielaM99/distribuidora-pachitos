@@ -6,15 +6,19 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 
 export default function Admin() {
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [imagen, setImagen] = useState("");
-  const [categoria, setCategoria] = useState("bebidas");
+  const [categoria, setCategoria] = useState("Jean");
 
   const [productos, setProductos] = useState([]);
+
+  // 🧠 para editar
+  const [editId, setEditId] = useState(null);
 
   const productosRef = collection(db, "productos");
 
@@ -34,23 +38,59 @@ export default function Admin() {
     obtenerProductos();
   }, []);
 
-  // ➕ CREAR PRODUCTO
+  // ➕ CREAR
   const crearProducto = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    await addDoc(productosRef, {
-      nombre,
-      precio,
-      imagen,
-      categoria,
-    });
+  // 🚨 VALIDACIÓN
+  if (!nombre || !precio || !imagen || !categoria) {
+    alert("⚠️ Completa todos los campos");
+    return;
+  }
 
-    setNombre("");
-    setPrecio("");
-    setImagen("");
+  await addDoc(productosRef, {
+    nombre,
+    precio,
+    imagen,
+    categoria,
+  });
 
-    obtenerProductos();
+  limpiarForm();
+  obtenerProductos();
+};
+
+  // ✏️ EDITAR (cargar datos al form)
+  const editarProducto = (producto) => {
+    setNombre(producto.nombre);
+    setPrecio(producto.precio);
+    setImagen(producto.imagen);
+    setCategoria(producto.categoria);
+    setEditId(producto.id);
   };
+
+  // 💾 GUARDAR EDICIÓN
+  const actualizarProducto = async (e) => {
+  e.preventDefault();
+
+  // 🚨 VALIDACIÓN
+  if (!nombre || !precio || !imagen || !categoria) {
+    alert("⚠️ Completa todos los campos");
+    return;
+  }
+
+  const productoRef = doc(db, "productos", editId);
+
+  await updateDoc(productoRef, {
+    nombre,
+    precio,
+    imagen,
+    categoria,
+  });
+
+  limpiarForm();
+  setEditId(null);
+  obtenerProductos();
+};
 
   // ❌ ELIMINAR
   const eliminarProducto = async (id) => {
@@ -58,12 +98,20 @@ export default function Admin() {
     obtenerProductos();
   };
 
+  // 🧹 LIMPIAR FORM
+  const limpiarForm = () => {
+    setNombre("");
+    setPrecio("");
+    setImagen("");
+    setCategoria("Jean");
+  };
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Admin Panel</h2>
 
       {/* FORM */}
-      <form onSubmit={crearProducto}>
+      <form onSubmit={editId ? actualizarProducto : crearProducto}>
         <input
           placeholder="Nombre"
           value={nombre}
@@ -82,19 +130,19 @@ export default function Admin() {
           onChange={(e) => setImagen(e.target.value)}
         />
 
-        {/* 🟡 CATEGORÍA SELECT */}
         <select
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
         >
-          <option value="bebidas">Bebidas</option>
-          <option value="snacks">Snacks</option>
-          <option value="panaderia">Panadería</option>
-          <option value="limpieza">Limpieza</option>
-          <option value="otros">Otros</option>
+          <option value="Jean">Jean</option>
+          <option value="Chalecos">Chalecos</option>
+          <option value="Anti-fluidos">Anti-fluidos</option>
+          <option value="Polo">Polo</option>
         </select>
 
-        <button type="submit">Guardar</button>
+        <button type="submit">
+          {editId ? "Actualizar" : "Guardar"}
+        </button>
       </form>
 
       {/* LISTA */}
@@ -111,6 +159,10 @@ export default function Admin() {
             <h4>{p.nombre}</h4>
             <p>${p.precio}</p>
             <p>{p.categoria}</p>
+
+            <button onClick={() => editarProducto(p)}>
+              Editar
+            </button>
 
             <button onClick={() => eliminarProducto(p.id)}>
               Eliminar

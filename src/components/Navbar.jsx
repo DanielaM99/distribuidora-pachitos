@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/Pachito.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header
@@ -29,14 +31,29 @@ export default function Navbar() {
         {/* 🟣 LOGO */}
         <Link
           to="/"
+          onDoubleClick={() => navigate("/login")}
           style={{
-            fontWeight: "bold",
-            fontSize: 20,
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
             textDecoration: "none",
             color: "#111",
+            fontWeight: "bold",
+            fontSize: 20,
+            cursor: "pointer",
           }}
         >
-           Pachitos
+          <img
+            src={logo}
+            alt="Pachitos"
+            style={{
+              width: 40,
+              height: 40,
+              objectFit: "contain",
+            }}
+          />
+
+          Distri Pachitos
         </Link>
 
         {/* 📱 MOBILE */}
@@ -84,13 +101,6 @@ export default function Navbar() {
           >
             WhatsApp
           </a>
-
-          {/* 🔐 ADMIN LINK SOLO SI NO ESTÁS LOGUEADO */}
-          {!user && (
-            <Link to="/login" style={linkStyle}>
-              Admin
-            </Link>
-          )}
 
           {/* 🚪 LOGOUT SOLO SI ESTÁS LOGUEADO */}
           {user && (

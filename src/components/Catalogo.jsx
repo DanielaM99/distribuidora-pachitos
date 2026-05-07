@@ -1,81 +1,97 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Catalogo() {
   const [productos, setProductos] = useState([]);
-  const [categoriaActiva, setCategoriaActiva] = useState("todos");
-  const [busqueda, setBusqueda] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [categoriaActiva, setCategoriaActiva] = useState("Todos");
+  const [search, setSearch] = useState("");
 
-  const navigate = useNavigate();
-
-  const productosRef = collection(db, "productos");
-
-  const obtenerProductos = async () => {
-    setLoading(true);
-
-    const data = await getDocs(productosRef);
-
-    setProductos(
-      data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }))
-    );
-
-    setLoading(false);
-  };
-
+  // 📦 Obtener productos
   useEffect(() => {
+    const obtenerProductos = async () => {
+      const data = await getDocs(collection(db, "productos"));
+
+      setProductos(
+        data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+      );
+    };
+
     obtenerProductos();
   }, []);
 
-  // 🧠 categorías dinámicas
+  // 🧠 Categorías únicas
   const categorias = [
-    "todos",
+    "Todos",
     ...new Set(productos.map((p) => p.categoria)),
   ];
 
-  // 🔍 filtro combinado
-  const productosFiltrados = productos
-    .filter((p) =>
-      categoriaActiva === "todos"
-        ? true
-        : p.categoria === categoriaActiva
-    )
-    .filter((p) =>
-      p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-    );
+  // 🔎 Filtrado
+  const productosFiltrados = productos.filter((p) => {
+    const coincideCategoria =
+      categoriaActiva === "Todos" ||
+      p.categoria === categoriaActiva;
+
+    const coincideBusqueda = p.nombre
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    return coincideCategoria && coincideBusqueda;
+  });
 
   return (
-    <section style={{ padding: 20, maxWidth: 1200, margin: "auto" }}>
-      <h2>Catálogo</h2>
+    <section
+      id="catalogo"
+      style={{
+        padding: "60px 20px",
+      }}
+    >
+      {/* 🔥 HEADER PRO */}
+      <div className="catalog-header">
+        <h2 className="catalog-title">Catálogo</h2>
 
-      {/* 🔍 BUSCADOR */}
-      <input
-        placeholder="Buscar productos..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 15 }}
-      />
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
 
-      {/* 🟡 CATEGORÍAS */}
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+      {/* 🟣 CATEGORÍAS */}
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          flexWrap: "wrap",
+          marginBottom: 40,
+        }}
+      >
         {categorias.map((cat) => (
           <button
             key={cat}
             onClick={() => setCategoriaActiva(cat)}
             style={{
-              padding: "8px 12px",
-              borderRadius: 20,
+              padding: "10px 18px",
+              borderRadius: 999,
               border: "none",
-              background:
-                categoriaActiva === cat ? "#111" : "#eee",
-              color:
-                categoriaActiva === cat ? "#fff" : "#333",
               cursor: "pointer",
+              fontWeight: 600,
+              background:
+                categoriaActiva === cat
+                  ? "#111"
+                  : "#f1f1f1",
+              color:
+                categoriaActiva === cat
+                  ? "#fff"
+                  : "#333",
+              transition: "0.3s",
             }}
           >
             {cat}
@@ -83,46 +99,89 @@ export default function Catalogo() {
         ))}
       </div>
 
-      {/* ⏳ LOADING */}
-      {loading && <p>Cargando...</p>}
-
-      {/* 📦 PRODUCTOS */}
+      {/* 📦 GRID PRODUCTOS */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns:
-            "repeat(auto-fit, minmax(180px, 1fr))",
-          gap: 20,
-          marginTop: 20,
+            "repeat(auto-fit, minmax(240px, 1fr))",
+          gap: 24,
         }}
       >
-        {productosFiltrados.map((p) => (
-          <div
-            key={p.id}
-            onClick={() => navigate(`/producto/${p.id}`)}
+        {productosFiltrados.map((producto) => (
+          <Link
+            key={producto.id}
+            to={`/producto/${producto.id}`}
             style={{
-              background: "#fff",
-              borderRadius: 12,
-              overflow: "hidden",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-              cursor: "pointer",
+              textDecoration: "none",
+              color: "inherit",
             }}
           >
-            <img
-              src={p.imagen}
+            <div
               style={{
-                width: "100%",
-                height: 150,
-                objectFit: "cover",
+                background: "#fff",
+                borderRadius: 20,
+                overflow: "hidden",
+                boxShadow:
+                  "0 6px 20px rgba(0,0,0,0.08)",
+                transition: "0.3s",
+                cursor: "pointer",
               }}
-            />
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform =
+                  "translateY(-5px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform =
+                  "translateY(0px)";
+              }}
+            >
+              {/* 🖼️ IMAGEN */}
+              <img
+                src={producto.imagen}
+                alt={producto.nombre}
+                style={{
+                  width: "100%",
+                  height: 260,
+                  objectFit: "cover",
+                }}
+              />
 
-            <div style={{ padding: 10 }}>
-              <h4>{p.nombre}</h4>
-              <p>${p.precio}</p>
-              <small>{p.categoria}</small>
+              {/* 📄 INFO */}
+              <div style={{ padding: 16 }}>
+                <p
+                  style={{
+                    color: "#888",
+                    fontSize: 13,
+                    marginBottom: 6,
+                  }}
+                >
+                  {producto.categoria}
+                </p>
+
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: 18,
+                    color: "#111",
+                  }}
+                >
+                  {producto.nombre}
+                </h3>
+
+                <p
+                  style={{
+                    marginTop: 10,
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    color: "#ff4d6d",
+                  }}
+                >
+                  ${producto.precio}
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
