@@ -30,7 +30,7 @@ export default function Login() {
         borderRadius: 10,
       }}
     >
-      <h2>Login Admin</h2>
+      <h2>Login</h2>
 
       <form onSubmit={handleLogin}>
         <input
