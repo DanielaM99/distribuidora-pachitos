@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
 
-// 🧩 COMPONENTES EXISTENTES
+// 🧩 COMPONENTES
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Catalogo from "./components/Catalogo";
@@ -11,47 +10,52 @@ import ProductPage from "./pages/ProductPage";
 import Nosotros from "./components/Nosotros";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// 🔐 NUEVO (ADMIN)
+// 🔐 ADMIN
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <>
-        {/* 🌐 HEADER GLOBAL */}
-        <Navbar />
+    <>
+      {/* 🌐 NAVBAR */}
+      <Navbar />
 
-        {/* 📍 RUTAS */}
-        <Routes>
-          {/* 🏠 HOME */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <Catalogo />
-                <Nosotros />
-              </>
-            }
-          />
+      {/* 📍 RUTAS */}
+      <Routes>
+        {/* 🏠 HOME */}
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Catalogo />
+              <Nosotros />
+            </>
+          }
+        />
 
-          {/* 📦 PRODUCTO */}
-          <Route path="/producto/:id" element={<ProductPage />} />
+        {/* 📦 PRODUCTO */}
+        <Route path="/producto/:id" element={<ProductPage />} />
 
-          {/* 🔐 ADMIN LOGIN */}
-          <Route path="/admin-login" element={<Login />} />
+        {/* 🔐 LOGIN */}
+        <Route path="/login" element={<Login />} />
 
-          {/* 🔐 PANEL ADMIN */}
-          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        </Routes>
+        {/* 🔐 ADMIN PROTEGIDO */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
 
-        {/* 🌐 FOOTER GLOBAL */}
-        <Footer />
+      {/* 🌐 FOOTER */}
+      <Footer />
 
-        {/* 📲 WHATSAPP FLOAT */}
-        <WhatsAppButton />
-      </>
-    </AuthProvider>
+      {/* 📲 WHATSAPP */}
+      <WhatsAppButton />
+    </>
   );
 }

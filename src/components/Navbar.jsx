@@ -36,7 +36,7 @@ export default function Navbar() {
             color: "#111",
           }}
         >
-          🛒 Pachitos
+           Pachitos
         </Link>
 
         {/* 📱 MOBILE */}
