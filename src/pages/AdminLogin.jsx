@@ -1,35 +1,43 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminLogin() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await AdminLogin(email, password);
       navigate("/admin");
-    } catch (err) {
-      setError("Credenciales incorrectas");
+    } catch (error) {
+      alert("Error en login");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "100px auto" }}>
-      <h2>Admin Login</h2>
+    <div
+      style={{
+        maxWidth: 400,
+        margin: "100px auto",
+        padding: 20,
+        border: "1px solid #ddd",
+        borderRadius: 10,
+      }}
+    >
+      <h2>Login Admin</h2>
 
       <form onSubmit={handleLogin}>
         <input
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={{ width: "100%", marginBottom: 10 }}
         />
 
         <input
@@ -37,11 +45,12 @@ export default function AdminLogin() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", marginBottom: 10 }}
         />
 
-        <button type="submit">Ingresar</button>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <button type="submit" style={{ width: "100%" }}>
+          Entrar
+        </button>
       </form>
     </div>
   );
