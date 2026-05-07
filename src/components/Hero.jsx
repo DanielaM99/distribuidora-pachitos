@@ -3,11 +3,11 @@ export default function Hero() {
     <section id="inicio" style={styles.hero}>
       <div className="container">
         <h1 style={styles.title}>
-          Distribuidora Pachitos
+          Distri Pachitos
         </h1>
 
         <p style={styles.subtitle}>
-          Dotaciones, uniformes y ropa personalizada para empresas en Colombia
+          Dotaciones empresariales y ropa personalizada para empresas en Colombia
         </p>
 
         <a

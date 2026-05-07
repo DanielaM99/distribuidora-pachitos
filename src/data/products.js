@@ -6,7 +6,7 @@ export const products = [
   {
     id: 1,
     name: "Pantalon ",
-    category: "Dotaciones",
+    category: "Dotaciones empresariales",
     images: [pantalon]
   },
   {

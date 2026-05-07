@@ -1,10 +1,10 @@
 export default function Nosotros() {
   return (
     <section style={styles.section} id="nosotros">
-      <h2>Sobre Distribuidora Pachitos</h2>
+      <h2>Sobre Distri Pachitos</h2>
 
       <p>
-        Somos una empresa especializada en dotaciones, uniformes y ropa
+        Somos una empresa especializada en Dotaciones empresariales y ropa
         personalizada para empresas en Colombia.
       </p>
 

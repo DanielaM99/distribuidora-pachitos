@@ -1,7 +1,7 @@
 export default function Navbar() {
   return (
     <header style={styles.header}>
-      <div style={styles.logo}>Distribuidora Pachitos</div>
+      <div style={styles.logo}>Distri Pachitos</div>
 
       <nav style={styles.nav}>
         <a href="#inicio">Inicio</a>

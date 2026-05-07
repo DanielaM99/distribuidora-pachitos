@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
     <footer style={styles.footer}>
-      <p>© 2026 Distribuidora Pachitos</p>
-      <p>Dotaciones y uniformes en Colombia</p>
+      <p>© 2026 Distri Pachitos</p>
+      <p>Dotaciones empresariales en Colombia</p>
     </footer>
   );
 }
