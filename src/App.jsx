@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-
 import { AuthProvider } from "./context/AuthContext";
 
 // 🧩 COMPONENTES EXISTENTES
@@ -10,6 +9,7 @@ import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 import ProductPage from "./pages/ProductPage";
 import Nosotros from "./components/Nosotros";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // 🔐 NUEVO (ADMIN)
 import AdminLogin from "./pages/AdminLogin";
@@ -43,7 +43,7 @@ export default function App() {
           <Route path="/admin-login" element={<AdminLogin />} />
 
           {/* 🔐 PANEL ADMIN */}
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         </Routes>
 
         {/* 🌐 FOOTER GLOBAL */}

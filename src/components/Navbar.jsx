@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header
@@ -34,16 +36,13 @@ export default function Navbar() {
             color: "#111",
           }}
         >
-          Distri Pachitos
+          🛒 Pachitos
         </Link>
 
-        {/* 📱 BOTÓN MOBILE */}
+        {/* 📱 MOBILE */}
         <div
           onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            display: "none",
-            cursor: "pointer",
-          }}
+          style={{ cursor: "pointer", display: "none" }}
           className="menu-toggle"
         >
           ☰
@@ -72,7 +71,7 @@ export default function Navbar() {
 
           {/* 💬 WHATSAPP */}
           <a
-            href="https://wa.me/573000000000"
+            href="https://wa.me/57TU_NUMERO"
             target="_blank"
             style={{
               background: "#25D366",
@@ -85,10 +84,34 @@ export default function Navbar() {
           >
             WhatsApp
           </a>
+
+          {/* 🔐 ADMIN LINK SOLO SI NO ESTÁS LOGUEADO */}
+          {!user && (
+            <Link to="/login" style={linkStyle}>
+              Admin
+            </Link>
+          )}
+
+          {/* 🚪 LOGOUT SOLO SI ESTÁS LOGUEADO */}
+          {user && (
+            <button
+              onClick={logout}
+              style={{
+                background: "#111",
+                color: "#fff",
+                padding: "8px 12px",
+                borderRadius: 10,
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Salir
+            </button>
+          )}
         </div>
       </nav>
 
-      {/* 📱 MOBILE MENU CSS INLINE FIX */}
+      {/* 📱 MOBILE CSS */}
       <style>{`
         @media (max-width: 768px) {
           .nav-links {
