@@ -16,6 +16,7 @@ export default function Navbar() {
         zIndex: 1000,
         background: "#fff",
         borderBottom: "1px solid #eee",
+        position: "relative",
       }}
     >
       <nav
@@ -125,24 +126,24 @@ export default function Navbar() {
       <style>{`
         @media (max-width: 768px) {
           .nav-links {
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background: white;
-            flex-direction: column;
-            width: 200px;
-            padding: 10px;
-            display: none;
-            border-left: 1px solid #eee;
-            border-bottom: 1px solid #eee;
+           position: absolute;
+           top: 60px;
+           right: 0;
+           background: white;
+           flex-direction: column;
+           width: 200px;
+           padding: 10px;
+           display: none;
+           border-left: 1px solid #eee;
+           border-bottom: 1px solid #eee;
           }
 
           .nav-links.open {
-            display: flex;
+           display: flex;
           }
 
           .menu-toggle {
-            display: block !important;
+           display: block !important;
           }
         }
       `}</style>

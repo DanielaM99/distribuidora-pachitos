@@ -10,15 +10,6 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
-.nav {
-  transform: translateX(-100%);
-  transition: 0.3s ease;
-}
-
-.nav.active {
-  transform: translateX(0);
-}
-
 p {
   color: #4b5563;
   line-height: 1.6;
