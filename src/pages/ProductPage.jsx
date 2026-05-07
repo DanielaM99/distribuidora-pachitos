@@ -18,7 +18,7 @@ export default function ProductPage() {
       <p>{product.description}</p>
 
       <a
-        href={`https://wa.me/573197036680?text=Quiero cotizar ${product.name}`}
+        href={`https://wa.me/57300300300007036680?text=Quiero cotizar ${product.name}`}
       >
         Cotizar
       </a>

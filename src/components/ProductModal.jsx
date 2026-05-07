@@ -57,7 +57,7 @@ export default function ProductModal({ product, onClose }) {
 
         {/* CTA WHATSAPP (OPTIMIZADO CONVERSIÓN) */}
         <a
-          href={`https://wa.me/573197036680?text=${encodeURIComponent(message)}`}
+          href={`https://wa.me/57300300300007036680?text=${encodeURIComponent(message)}`}
           target="_blank"
           style={styles.btn}
         >

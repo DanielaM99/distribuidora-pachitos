@@ -10,7 +10,7 @@ export default function Navbar() {
       </nav>
 
       <a
-        href="https://wa.me/573197036680"
+        href="https://wa.me/57300300300007036680"
         target="_blank"
         style={styles.button}
       >
