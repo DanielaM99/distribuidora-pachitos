@@ -1,73 +1,101 @@
-import { useState } from "react";
-import { products } from "../data/products";
-import ProductModal from "./ProductModal";
+import { useEffect, useState } from "react";
+import { db } from "../firebase/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Catalogo() {
-  const [selected, setSelected] = useState(null);
+  const [productos, setProductos] = useState([]);
+  const [categoriaActiva, setCategoriaActiva] = useState("todos");
+
+  const productosRef = collection(db, "productos");
+
+  const obtenerProductos = async () => {
+    const data = await getDocs(productosRef);
+
+    setProductos(
+      data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    obtenerProductos();
+  }, []);
+
+  // 📦 obtener categorías únicas
+  const categorias = [
+    "todos",
+    ...new Set(productos.map((p) => p.categoria)),
+  ];
+
+  // 🔍 filtrar productos
+  const productosFiltrados =
+    categoriaActiva === "todos"
+      ? productos
+      : productos.filter((p) => p.categoria === categoriaActiva);
 
   return (
-    <section id="catalogo">
-      <div className="container">
-        <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
-          Nuestros Productos
-        </h2>
+    <section style={{ padding: "20px" }}>
+      <h2>Catálogo</h2>
 
-        <div style={styles.grid}>
-          {products.map((p) => (
-            <div
-              key={p.id}
-              className="card-hover"
-              style={styles.card}
-              onClick={() => setSelected(p)}
-            >
-              <img src={p.images?.[0]} style={styles.img} />
-              <h3>{p.name}</h3>
-              <p style={styles.category}>{p.category}</p>
-
-              <p style={styles.cta}>
-                Ver detalles →
-              </p>
-            </div>
-          ))}
-        </div>
+      {/* 🟡 FILTROS */}
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+        {categorias.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategoriaActiva(cat)}
+            style={{
+              padding: "8px 12px",
+              borderRadius: 20,
+              border: "1px solid #ccc",
+              background: categoriaActiva === cat ? "#000" : "#fff",
+              color: categoriaActiva === cat ? "#fff" : "#000",
+              cursor: "pointer",
+            }}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      <ProductModal
-        product={selected}
-        onClose={() => setSelected(null)}
-      />
+      {/* 📦 PRODUCTOS */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: "15px",
+        }}
+      >
+        {productosFiltrados.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              border: "1px solid #eee",
+              borderRadius: 12,
+              overflow: "hidden",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              background: "#fff",
+            }}
+          >
+            <img
+              src={p.imagen}
+              alt={p.nombre}
+              style={{
+                width: "100%",
+                height: "130px",
+                objectFit: "cover",
+              }}
+            />
+
+            <div style={{ padding: 10 }}>
+              <h4>{p.nombre}</h4>
+              <p style={{ margin: 0 }}>${p.precio}</p>
+              <small style={{ color: "gray" }}>{p.categoria}</small>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
-
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-    gap: "20px"
-  },
-
-  card: {
-    background: "white",
-    padding: "15px",
-    borderRadius: "14px",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
-  },
-
-  img: {
-    width: "100%",
-    borderRadius: "10px"
-  },
-
-  category: {
-    fontSize: "12px",
-    color: "#6b7280"
-  },
-
-  cta: {
-    marginTop: "10px",
-    fontSize: "13px",
-    color: "#0ea5e9",
-    fontWeight: "600"
-  }
-};
