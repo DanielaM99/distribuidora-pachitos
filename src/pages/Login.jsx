@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -56,7 +56,7 @@ export default function Login() {
     <div
       style={{
         maxWidth: 400,
-        margin: "100px auto",
+        margin: "120px auto",
         padding: 20,
         border: "1px solid #ddd",
         borderRadius: 12,
@@ -64,6 +64,20 @@ export default function Login() {
         textAlign: "center",
       }}
     >
+      {/* 🔙 Volver al inicio */}
+      <div style={{ textAlign: "left", marginBottom: 10 }}>
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "#666",
+            fontSize: 14,
+          }}
+        >
+          ← Volver al inicio
+        </Link>
+      </div>
+
       <h2>🔐 Login Admin</h2>
 
       <form onSubmit={handleLogin}>
@@ -85,11 +99,7 @@ export default function Login() {
           required
         />
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={buttonStyle}
-        >
+        <button type="submit" disabled={loading} style={buttonStyle}>
           {loading ? "Entrando..." : "Entrar"}
         </button>
       </form>
@@ -99,16 +109,16 @@ export default function Login() {
 
 // 🎨 estilos simples
 const inputStyle = {
-  width: "100%",
+  width: "85%",
   padding: 10,
-  margin: "10px 0",
+  margin: "15px 0",
   borderRadius: 8,
-  border: "1px solid #ccc",
+  border: "2px solid #ccc",
 };
 
 const buttonStyle = {
-  width: "100%",
-  padding: 10,
+  width: "90%",
+  padding: 13,
   background: "#111",
   color: "#fff",
   border: "none",
